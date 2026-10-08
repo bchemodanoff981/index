@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>КЭЛ — калькулятор электрической пригодности</title>
+<style>
+:root{--bg:#eef3f8;--card:#fff;--ink:#17253a;--muted:#66758a;--line:#dbe3ec;--accent:#1769aa;--accent2:#0f4f83;--soft:#edf6ff;--danger:#b42318;--shadow:0 12px 35px rgba(22,45,70,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#eaf2fa 0,#f7f9fb 380px,#eef3f8 100%);color:var(--ink);font-family:Inter,Arial,sans-serif;line-height:1.5}.wrap{max-width:1040px;margin:auto;padding:26px 18px 48px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#102f4d,#1769aa);color:#fff;border-radius:24px;padding:34px 34px 30px;box-shadow:0 18px 45px rgba(20,68,110,.22);margin-bottom:18px}.hero:after{content:"";position:absolute;width:300px;height:300px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:-100px;top:-130px;box-shadow:0 0 0 55px rgba(255,255,255,.035),0 0 0 110px rgba(255,255,255,.025)}.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 11px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.3px}.hero h1{font-size:42px;line-height:1.05;margin:17px 0 10px;letter-spacing:-1px}.hero p{max-width:760px;margin:0;color:#dcecff}.hero .sub{margin-top:10px;font-size:14px;color:#bcd8ef}
+.card{background:var(--card);border:1px solid rgba(20,55,85,.07);border-radius:20px;padding:25px;box-shadow:var(--shadow);margin:18px 0}.section-title{display:flex;align-items:center;gap:12px;margin:0 0 5px;font-size:22px}.section-title .num{width:32px;height:32px;border-radius:10px;background:var(--soft);color:var(--accent);display:grid;place-items:center;font-size:14px;font-weight:800}.section-desc{margin:0 0 20px;color:var(--muted);font-size:14px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field{position:relative}.field label{display:block;font-size:14px;font-weight:750;margin-bottom:7px}.input-wrap{position:relative}.input-wrap input{width:100%;padding:13px 58px 13px 14px;border:1px solid var(--line);border-radius:12px;background:#fbfcfe;color:var(--ink);font-size:16px;font-weight:600;outline:none;transition:.18s}.input-wrap input:focus{border-color:#5b9bd0;box-shadow:0 0 0 4px rgba(23,105,170,.11);background:#fff}.unit{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--muted);font-weight:700;pointer-events:none}.hint{font-size:11px;color:#8996a7;margin-top:5px}
+.actions{display:flex;gap:12px;align-items:center}.calc{flex:1;border:0;border-radius:13px;padding:14px 18px;background:linear-gradient(135deg,#1769aa,#0f4f83);color:#fff;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(23,105,170,.2);transition:transform .15s,box-shadow .15s}.calc:hover{transform:translateY(-1px);box-shadow:0 11px 23px rgba(23,105,170,.27)}.live{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px}.dot{width:8px;height:8px;background:#27a269;border-radius:50%;box-shadow:0 0 0 4px rgba(39,162,105,.1)}
+.result-top{display:flex;justify-content:space-between;gap:20px;align-items:center}.score-label{font-size:13px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px}.score{font-size:52px;line-height:1;font-weight:900;letter-spacing:-2px;color:var(--accent)}.category{font-size:17px;font-weight:800;margin-top:5px}.score-ring{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) 0deg,var(--accent) 0deg,#e8eef4 0deg,#e8eef4 360deg);position:relative}.score-ring:before{content:"";position:absolute;inset:9px;background:#fff;border-radius:50%}.score-ring span{position:relative;font-weight:900;font-size:20px;color:var(--ink)}.scale{margin:20px 0 8px;position:relative;padding-top:10px}.scale-bar{height:13px;border-radius:99px;background:linear-gradient(90deg,#e7a23b 0 40%,#d7c84b 40% 60%,#65b77a 60% 80%,#3189bf 80% 100%);overflow:hidden}.scale-marker{position:absolute;top:0;width:3px;height:25px;background:#17253a;border-radius:2px;transform:translateX(-50%);transition:left .3s}.scale-labels{display:flex;justify-content:space-between;color:#7b8796;font-size:11px;margin-top:5px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:20px}.stat{padding:15px;border:1px solid var(--line);border-radius:13px;background:#fbfcfe}.stat .k{font-size:12px;color:var(--muted);margin-bottom:4px}.stat b{font-size:18px}.conclusion{margin-top:15px;padding:14px 16px;border-radius:13px;background:var(--soft);border-left:4px solid var(--accent);font-size:14px}.error{padding:13px 15px;border-radius:12px;background:#fff0ef;color:var(--danger);border:1px solid #ffd2ce}
+.formulas{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.formula{padding:14px 16px;border-radius:12px;background:#f6f8fb;border:1px solid #e6ebf1;font-family:Georgia,serif;font-size:17px}.note{font-size:13px;color:var(--muted);margin:15px 0 0}.chart-wrap{padding:4px 0 0}.canvas-box{border:1px solid var(--line);border-radius:15px;padding:10px;background:#fbfcfe}.canvas-box canvas{display:block;width:100%;height:310px}.footer-note{text-align:center;color:#8190a1;font-size:12px;margin:24px 0 0}
+@media(max-width:720px){.wrap{padding:14px 12px 35px}.hero{padding:25px 21px;border-radius:20px}.hero h1{font-size:34px}.grid,.formulas{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.result-top{align-items:flex-start}.score-ring{width:92px;height:92px}.card{padding:19px;border-radius:17px}.live{display:none}}
+@media(max-width:450px){.stats{grid-template-columns:1fr 1fr}.score{font-size:43px}.score-ring{width:78px;height:78px}.score-ring span{font-size:17px}.actions{display:block}.calc{width:100%}.hero h1{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <span class="badge">✦ учебный исследовательский инструмент</span>
+  <h1>Калькулятор КЭЛ</h1>
+  <p><b>Коэффициент электрической пригодности</b> — расчётный показатель для оценки того, насколько масса необходимого аккумулятора велика относительно массы воздушного судна.</p>
+  <p class="sub">Модель учитывает массу самолёта, дальность, скорость, мощность, удельную энергию аккумулятора и КПД системы.</p>
+</header>
+
+<section class="card">
+  <h2 class="section-title"><span class="num">01</span> Исходные данные</h2>
+  <p class="section-desc">Введите параметры рассматриваемого варианта. Результат пересчитывается автоматически.</p>
+  <div class="grid">
+    <div class="field"><label for="mass">Масса самолёта</label><div class="input-wrap"><input id="mass" type="number" value="1000" min="1" step="1"><span class="unit">кг</span></div><div class="hint">Масса воздушного судна в расчёте.</div></div>
+    <div class="field"><label for="range">Дальность полёта</label><div class="input-wrap"><input id="range" type="number" value="200" min="1" step="1"><span class="unit">км</span></div><div class="hint">Расстояние, которое должен пройти самолёт.</div></div>
+    <div class="field"><label for="speed">Средняя скорость</label><div class="input-wrap"><input id="speed" type="number" value="200" min="1" step="1"><span class="unit">км/ч</span></div><div class="hint">Средняя скорость полёта.</div></div>
+    <div class="field"><label for="power">Средняя мощность</label><div class="input-wrap"><input id="power" type="number" value="50" min="0.1" step="0.1"><span class="unit">кВт</span></div><div class="hint">Средняя потребляемая мощность.</div></div>
+    <div class="field"><label for="energyDensity">Удельная энергия аккумулятора</label><div class="input-wrap"><input id="energyDensity" type="number" value="190" min="1" step="1"><span class="unit">Вт·ч/кг</span></div><div class="hint">Энергия, приходящаяся на 1 кг аккумулятора.</div></div>
+    <div class="field"><label for="efficiency">КПД системы</label><div class="input-wrap"><input id="efficiency" type="number" value="75" min="1" max="100" step="1"><span class="unit">%</span></div><div class="hint">Учитывает потери энергии в системе.</div></div>
+  </div>
+</section>
+
+<section class="card">
+  <div class="actions"><button class="calc" id="calcBtn">Рассчитать КЭЛ</button><span class="live"><i class="dot"></i> расчёт в реальном времени</span></div>
+  <div id="out" style="margin-top:22px"></div>
+</section>
+
+<section class="card">
+  <h2 class="section-title"><span class="num">02</span> Как рассчитывается КЭЛ</h2>
+  <p class="section-desc">Расчёт выполняется последовательно: сначала определяется время полёта и энергия, затем необходимая масса аккумулятора и её доля в массе самолёта.</p>
+  <div class="formulas">
+    <div class="formula">t = L / V</div>
+    <div class="formula">E = P × t / η</div>
+    <div class="formula">m<sub>бат</sub> = 1000 × E / e</div>
+    <div class="formula">f<sub>бат</sub> = m<sub>бат</sub> / M × 100%</div>
+    <div class="formula">K<sub>эл</sub> = 100 × (1 − f<sub>бат</sub> / 50)</div>
+  </div>
+  <p class="note"><b>Важно:</b> 50% в последней формуле — условная учебная граница, использованная в данной исследовательской модели. Это не официальный авиационный норматив. Значение КЭЛ ограничивается диапазоном от 0 до 100.</p>
+</section>
+
+<section class="card">
+  <h2 class="section-title"><span class="num">03</span> Влияние дальности</h2>
+  <p class="section-desc">График показывает, как при остальных неизменных параметрах изменяется КЭЛ при увеличении дальности полёта.</p>
+  <div class="canvas-box"><canvas id="chart"></canvas></div>
+</section>
+
+<p class="footer-note">КЭЛ — учебная расчётная модель для исследовательского проекта. Результаты не заменяют инженерный расчёт и сертификацию воздушного судна.</p>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+function num(id){return parseFloat($(id).value)}
+function calculate(){
+ const M=num('mass'),L=num('range'),V=num('speed'),P=num('power'),e=num('energyDensity'),eta=num('efficiency')/100,out=$('out');
+ if([M,L,V,P,e,eta].some(v=>!Number.isFinite(v))){out.innerHTML='<div class="error"><b>Ошибка:</b> заполните все поля числами.</div>';return null}
+ if(M<=0||L<=0||V<=0||P<=0||e<=0||eta<=0||eta>1){out.innerHTML='<div class="error"><b>Ошибка:</b> проверьте введённые значения.</div>';return null}
+ const time=L/V,energy=P*time/eta,batteryKg=1000*energy/e,fraction=100*batteryKg/M,K=clamp(100*(1-fraction/50),0,100);
+ let category;if(K>=80)category='Высокая расчётная пригодность';else if(K>=60)category='Средняя расчётная пригодность';else if(K>=40)category='Ограниченная пригодность';else category='Низкая расчётная пригодность';
+ out.innerHTML=`<div class="result-top"><div><div class="score-label">Коэффициент электрической пригодности</div><div class="score">K<sub>эл</sub> = ${K.toFixed(1)}</div><div class="category">${category}</div></div><div class="score-ring" id="ring"><span>${K.toFixed(0)}</span></div></div><div class="scale"><div class="scale-bar"></div><div class="scale-marker" id="marker"></div><div class="scale-labels"><span>0</span><span>40</span><span>60</span><span>80</span><span>100</span></div></div><div class="stats"><div class="stat"><div class="k">Время полёта</div><b>${time.toFixed(2)} ч</b></div><div class="stat"><div class="k">Необходимая энергия</div><b>${energy.toFixed(1)} кВт·ч</b></div><div class="stat"><div class="k">Масса аккумулятора</div><b>${batteryKg.toFixed(1)} кг</b></div><div class="stat"><div class="k">Доля аккумулятора</div><b>${fraction.toFixed(1)}%</b></div></div><div class="conclusion"><b>Вывод:</b> ${fraction<50?'расчётная масса аккумулятора находится ниже условной границы 50% массы самолёта.':'расчётная масса аккумулятора достигает или превышает условную границу 50% массы самолёта.'}</div>`;
+ $('marker').style.left=K+'%';$('ring').style.background=`conic-gradient(var(--accent) ${K*3.6}deg,#e8eef4 ${K*3.6}deg 360deg)`;drawChart(M,V,P,e,eta,L);return{M,V,P,e,eta,L,K};
+}
+function kForRange(R,M,V,P,e,eta){const t=R/V,E=P*t/eta,batt=1000*E/e,f=100*batt/M;return clamp(100*(1-f/50),0,100)}
+function drawChart(M,V,P,e,eta,currentRange){
+ const c=$('chart'),box=c.getBoundingClientRect(),dpr=Math.max(1,window.devicePixelRatio||1),w=Math.max(320,Math.round(box.width)),h=310;c.width=w*dpr;c.height=h*dpr;const ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+ const pad={l:48,r:18,t:18,b:42},x0=pad.l,y0=h-pad.b,x1=w-pad.r,y1=pad.t,maxR=Math.max(500,Math.ceil(currentRange/100)*100),pts=[];
+ const grid='#dfe6ee',text='#718096',line='#1769aa';ctx.font='12px Arial';ctx.lineWidth=1;
+ for(let i=0;i<=5;i++){const K=i*20,y=y0-(K/100)*(y0-y1);ctx.strokeStyle=grid;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.stroke();ctx.fillStyle=text;ctx.textAlign='right';ctx.fillText(K,x0-8,y+4)}
+ for(let i=0;i<=10;i++){const R=maxR*i/10,x=x0+(i/10)*(x1-x0);ctx.strokeStyle=grid;ctx.beginPath();ctx.moveTo(x,y0);ctx.lineTo(x,y1);ctx.stroke();ctx.fillStyle=text;ctx.textAlign='center';ctx.fillText(Math.round(R),x,y0+20)}
+ for(let i=0;i<=100;i++){const R=maxR*i/100;pts.push([x0+(R/maxR)*(x1-x0),y0-(kForRange(R,M,V,P,e,eta)/100)*(y0-y1)])}
+ ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=line;ctx.lineWidth=3;ctx.lineJoin='round';ctx.stroke();
+ const k=kForRange(currentRange,M,V,P,e,eta),cx=x0+(currentRange/maxR)*(x1-x0),cy=y0-(k/100)*(y0-y1);ctx.beginPath();ctx.arc(cx,cy,6,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=line;ctx.lineWidth=3;ctx.stroke();
+ ctx.fillStyle=text;ctx.textAlign='center';ctx.fillText('Дальность, км',w/2,h-8);ctx.save();ctx.translate(13,h/2);ctx.rotate(-Math.PI/2);ctx.fillText('Kэл',0,0);ctx.restore();
+}
+$('calcBtn').addEventListener('click',calculate);['mass','range','speed','power','energyDensity','efficiency'].forEach(id=>$(id).addEventListener('input',calculate));window.addEventListener('resize',()=>{const M=num('mass'),L=num('range'),V=num('speed'),P=num('power'),e=num('energyDensity'),eta=num('efficiency')/100;if([M,L,V,P,e,eta].every(Number.isFinite))drawChart(M,V,P,e,eta,L)});window.addEventListener('load',calculate);
+})();
+</script>
+</body>
+</html>
